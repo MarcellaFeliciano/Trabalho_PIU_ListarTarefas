@@ -8,7 +8,8 @@ export default function Listar() {
   const [idEditando, setIdEditando] = useState(null);
   const [lista, setLista] = useState([]);
   const [temaEscuro, setTemaEscuro] = useState(false);
-  const [filtro, setFiltro] = useState('Todos');
+  const [filtroCategoria, setFiltroCategoria] = useState('Todos');
+  const [filtroStatus, setFiltroStatus] = useState('Todas');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,11 +24,9 @@ export default function Listar() {
     };
 
     if (idEditando) {
-      setLista(
-        lista.map((item) =>
-          item.id === idEditando ? { ...item, titulo, descricao, categoria } : item
-        )
-      );
+      setLista(lista.map(item =>
+        item.id === idEditando ? { ...item, titulo, descricao, categoria } : item
+      ));
       setIdEditando(null);
     } else {
       setLista([...lista, novaTarefa]);
@@ -39,22 +38,20 @@ export default function Listar() {
   };
 
   const handleToggle = (id) => {
-    setLista(
-      lista.map((item) =>
-        item.id === id ? { ...item, status: !item.status } : item
-      )
-    );
+    setLista(lista.map(item =>
+      item.id === id ? { ...item, status: !item.status } : item
+    ));
   };
 
   const handleApagar = (id) => {
-  const confirmacao = window.confirm('Tem certeza que deseja apagar esta tarefa?');
-  if (confirmacao) {
-    setLista(lista.filter((item) => item.id !== id));
-  }
-};
+    const confirmar = window.confirm('Tem certeza que deseja apagar esta tarefa?');
+    if (confirmar) {
+      setLista(lista.filter(item => item.id !== id));
+    }
+  };
 
   const handleEditar = (id) => {
-    const item = lista.find((item) => item.id === id);
+    const item = lista.find(item => item.id === id);
     if (item) {
       setTitulo(item.titulo);
       setDescricao(item.descricao);
@@ -64,31 +61,33 @@ export default function Listar() {
   };
 
   const handleMove = (id, direcao) => {
-    const indice = lista.findIndex((item) => item.id === id);
-    if (
-      (indice === 0 && direcao === 'subir') ||
-      (indice === lista.length - 1 && direcao === 'descer')
-    )
-      return;
+    const index = lista.findIndex(item => item.id === id);
+    if ((index === 0 && direcao === 'subir') || (index === lista.length - 1 && direcao === 'descer')) return;
 
     const novaLista = [...lista];
-    const itemMovido = novaLista.splice(indice, 1)[0];
-    const novoIndice = direcao === 'subir' ? indice - 1 : indice + 1;
+    const [itemMovido] = novaLista.splice(index, 1);
+    const novoIndice = direcao === 'subir' ? index - 1 : index + 1;
     novaLista.splice(novoIndice, 0, itemMovido);
     setLista(novaLista);
   };
 
   const handleClear = () => {
-  const confirmacao = window.confirm('Tem certeza que deseja resetar toda a lista?');
-  if (confirmacao) {
-    setLista([]);
-  }
-};
+    const confirmar = window.confirm('Deseja mesmo apagar todas as tarefas?');
+    if (confirmar) {
+      setLista([]);
+    }
+  };
 
-  const tarefasFiltradas =
-    filtro === 'Todos'
-      ? lista
-      : lista.filter((t) => t.categoria === filtro);
+  // Aplica os filtros
+  const tarefasFiltradas = lista.filter((tarefa) => {
+    const categoriaOk = filtroCategoria === 'Todos' || tarefa.categoria === filtroCategoria;
+    const statusOk =
+      filtroStatus === 'Todas' ||
+      (filtroStatus === 'Concluídas' && tarefa.status) ||
+      (filtroStatus === 'Pendentes' && !tarefa.status);
+
+    return categoriaOk && statusOk;
+  });
 
   return (
     <div className={`container ${temaEscuro ? 'tema-escuro' : 'tema-claro'}`}>
@@ -98,13 +97,27 @@ export default function Listar() {
           {['Todos', 'Escola', 'Trabalho', 'Pessoal'].map((cat) => (
             <li
               key={cat}
-              className={filtro === cat ? 'ativo' : ''}
-              onClick={() => setFiltro(cat)}
+              className={filtroCategoria === cat ? 'ativo' : ''}
+              onClick={() => setFiltroCategoria(cat)}
             >
               {cat}
             </li>
           ))}
         </ul>
+
+        <h3>Status</h3>
+        <ul>
+          {['Todas', 'Pendentes', 'Concluídas'].map((status) => (
+            <li
+              key={status}
+              className={filtroStatus === status ? 'ativo' : ''}
+              onClick={() => setFiltroStatus(status)}
+            >
+              {status}
+            </li>
+          ))}
+        </ul>
+
         <button className="botao-tema" onClick={() => setTemaEscuro(!temaEscuro)}>
           Alternar Tema
         </button>
@@ -112,22 +125,23 @@ export default function Listar() {
 
       <div className="conteudo">
         <h2>Lista de Tarefas</h2>
+
         <form onSubmit={handleSubmit} className="form-tarefa">
           <input
             type="text"
-            onChange={(e) => setTitulo(e.target.value)}
-            value={titulo}
             placeholder="Título"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
           />
           <input
             type="text"
-            onChange={(e) => setDescricao(e.target.value)}
-            value={descricao}
             placeholder="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
           />
           <select
-            onChange={(e) => setCategoria(e.target.value)}
             value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
           >
             <option value="">Categoria</option>
             <option value="Escola">Escola</option>
@@ -155,26 +169,10 @@ export default function Listar() {
               </div>
 
               <div className="acoes">
-                <button className="editar" onClick={() => handleEditar(item.id)}>
-                  ✎
-                </button>
-                <button className="apagar" onClick={() => handleApagar(item.id)}>
-                  🗑
-                </button>
-                <button
-                  className="ordenar"
-                  onClick={() => handleMove(item.id, 'subir')}
-                  disabled={index === 0}
-                >
-                  ↑
-                </button>
-                <button
-                  className="ordenar"
-                  onClick={() => handleMove(item.id, 'descer')}
-                  disabled={index === lista.length - 1}
-                >
-                  ↓
-                </button>
+                <button className="editar" onClick={() => handleEditar(item.id)}>✎</button>
+                <button className="apagar" onClick={() => handleApagar(item.id)}>🗑</button>
+                <button className="ordenar" onClick={() => handleMove(item.id, 'subir')} disabled={index === 0}>↑</button>
+                <button className="ordenar" onClick={() => handleMove(item.id, 'descer')} disabled={index === lista.length - 1}>↓</button>
               </div>
             </li>
           ))}

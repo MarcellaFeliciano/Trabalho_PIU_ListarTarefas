@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: #f2f2f2;
+  background-color: #12111d; /* fundo claro da paleta */
 }
 
 /* Containers principais */
@@ -18,26 +18,44 @@ body {
 
 /* Tema claro */
 .tema-claro {
-  background-color: #f9fafb;
+  background-color: #f0fdf4;
   color: #1f2937;
+}
+
+.tema-claro .form-tarefa,
+.tema-claro li,
+.tema-claro .sidebar {
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+.tema-claro input,
+.tema-claro select {
+  background-color: #ecfdf5;
+  color: #1f2937;
+  border-color: #a7f3d0;
+}
+
+.tema-claro .concluida {
+  background-color: #d1fae5;
 }
 
 /* Tema escuro */
 .tema-escuro {
-  background-color: #1f2937;
+  background-color: #1e1b2e;
   color: #f9fafb;
 }
 
 .tema-escuro .form-tarefa,
 .tema-escuro li,
 .tema-escuro .sidebar {
-  background-color: #374151;
+  background-color: #2a253b;
   color: #f3f4f6;
 }
 
 .tema-escuro input,
 .tema-escuro select {
-  background-color: #4b5563;
+  background-color: #3b3660;
   color: #f9fafb;
   border-color: #6b7280;
 }
@@ -48,10 +66,10 @@ body {
 
 /* Sidebar de filtros */
 .sidebar {
-  width: 200px;
+  width: 220px;
   padding: 20px;
-  background-color: #e5e7eb;
-  border-right: 1px solid #ccc;
+  background-color: #d1fae5;
+  border-right: 1px solid #65c99d;
 }
 
 .sidebar h3 {
@@ -65,18 +83,19 @@ body {
 
 .sidebar li {
   cursor: pointer;
-  padding: 8px 10px;
+  padding: 10px 12px;
   margin-bottom: 8px;
   border-radius: 8px;
   transition: 0.2s;
 }
 
 .sidebar li:hover {
-  background-color: #d1d5db;
+  background-color: #a7f3d0;
+  color: #065f46;
 }
 
 .sidebar li.ativo {
-  background-color: #10b981;
+  background-color: #34d399;
   color: white;
   font-weight: bold;
 }
@@ -85,12 +104,17 @@ body {
 .botao-tema {
   margin-top: 20px;
   padding: 10px 16px;
-  background-color: #10b981;
+  background-color: #34d399;
   color: white;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
+  transition: 0.3s;
+}
+
+.botao-tema:hover {
+  background-color: #10b981;
 }
 
 /* Conteúdo principal */
@@ -113,7 +137,7 @@ h2 {
   background-color: white;
   padding: 20px;
   border-radius: 16px;
-  box-shadow: 0 2px 8px #e0e0e0;
+  box-shadow: 0 2px 8px #a7f3d0;
   margin-bottom: 20px;
   align-items: center;
 }
@@ -129,7 +153,7 @@ h2 {
 }
 
 .form-tarefa input[type="submit"] {
-  background-color: #10b981;
+  background-color: #34d399;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -140,13 +164,13 @@ h2 {
 }
 
 .form-tarefa input[type="submit"]:hover {
-  background-color: #059669;
+  background-color: #10b981;
 }
 
 /* Botão de reset */
 .botao-reset {
-  background-color: #e2e8f0;
-  color: #333;
+  background-color: #a7f3d0;
+  color: #065f46;
   border: none;
   padding: 10px 20px;
   border-radius: 12px;
@@ -155,7 +179,7 @@ h2 {
 }
 
 .botao-reset:hover {
-  background-color: #cbd5e1;
+  background-color: #6ee7b7;
 }
 
 /* Lista */
@@ -180,7 +204,7 @@ li {
 /* Tarefa concluída */
 .concluida {
   background-color: #d1fae5;
-  border-left: 6px solid #16a34a;
+  border-left: 6px solid #10b981;
 }
 
 .concluida .info-tarefa span {
@@ -193,8 +217,9 @@ li {
   flex-grow: 1;
   margin: 0 20px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
 }
 
 .info-tarefa .titulo {
@@ -204,13 +229,13 @@ li {
 
 .info-tarefa .descricao {
   font-size: 14px;
-  color: #555;
+  color: #4b5563;
 }
 
 .info-tarefa .categoria {
-  font-size: 12px;
-  color: #777;
+  font-size: 14px;
   font-style: italic;
+  color: #065f46;
 }
 
 /* Ações */
@@ -233,29 +258,28 @@ li {
 
 .concluir {
   font-size: 20px;
-  color: #16a34a;
+  color: #22c55e;
   border: none;
   background: none;
   cursor: pointer;
 }
 
 .editar {
-  color: #ffca44;
+  color: #facc15;
 }
 
 .apagar {
-  color: #dc2626;
+  color: #ef4444;
 }
 
 .ordenar {
-  color: #6b7280;
+  color: #10b981;
 }
 
 .ordenar:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-
 
 button:focus {
   outline: none;
