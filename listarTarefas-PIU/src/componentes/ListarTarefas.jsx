@@ -1,5 +1,5 @@
 import './ListarTarefas.css';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Listar() {
   const [titulo, setTitulo] = useState('');
@@ -10,6 +10,15 @@ export default function Listar() {
   const [temaEscuro, setTemaEscuro] = useState(false);
   const [filtroCategoria, setFiltroCategoria] = useState('Todos');
   const [filtroStatus, setFiltroStatus] = useState('Todas');
+
+  const formRef = useRef(null);
+  const tituloRef = useRef(null);
+
+  useEffect(() => {
+    if (idEditando !== null && tituloRef.current) {
+      tituloRef.current.focus();
+    }
+  }, [idEditando]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,6 +66,7 @@ export default function Listar() {
       setDescricao(item.descricao);
       setCategoria(item.categoria);
       setIdEditando(id);
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -78,14 +88,12 @@ export default function Listar() {
     }
   };
 
-  // Aplica os filtros
   const tarefasFiltradas = lista.filter((tarefa) => {
     const categoriaOk = filtroCategoria === 'Todos' || tarefa.categoria === filtroCategoria;
     const statusOk =
       filtroStatus === 'Todas' ||
       (filtroStatus === 'Concluídas' && tarefa.status) ||
       (filtroStatus === 'Pendentes' && !tarefa.status);
-
     return categoriaOk && statusOk;
   });
 
@@ -126,8 +134,9 @@ export default function Listar() {
       <div className="conteudo">
         <h2>Lista de Tarefas</h2>
 
-        <form onSubmit={handleSubmit} className="form-tarefa">
+        <form ref={formRef} onSubmit={handleSubmit} className="form-tarefa">
           <input
+            ref={tituloRef}
             type="text"
             placeholder="Título"
             value={titulo}
