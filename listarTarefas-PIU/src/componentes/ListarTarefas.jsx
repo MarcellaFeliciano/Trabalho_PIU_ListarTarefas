@@ -73,7 +73,7 @@ export default function Listar() {
       setCategoria(item.categoria);
       setIdEditando(id);
       formRef.current?.scrollIntoView({ behavior: 'smooth' }); // redireciona pora cima de forma suave, a partir do referencial dfinido no form
-    
+    }
   };
 
   // manipula a ordem das tarefas (código de Iuri)
@@ -206,5 +206,4 @@ export default function Listar() {
       </div>
     </div>
   );
-}
 }
