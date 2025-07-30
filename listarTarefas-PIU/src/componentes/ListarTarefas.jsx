@@ -67,11 +67,13 @@ export default function Listar() {
   // manipula o visor da página para subir para o formulário de edição!
   const handleEditar = (id) => {
     const item = lista.find(item => item.id === id); // procura o objeto
+
     if (item) { // retorna no formulário os dados originais
       setTitulo(item.titulo);
       setDescricao(item.descricao);
       setCategoria(item.categoria);
       setIdEditando(id);
+
       formRef.current?.scrollIntoView({ behavior: 'smooth' }); // redireciona pora cima de forma suave, a partir do referencial dfinido no form
     }
   };
@@ -98,8 +100,10 @@ export default function Listar() {
 
   // Faz as filtragens varrendo a lista de tarefas
   const tarefasFiltradas = lista.filter((tarefa) => {
+
     // caso não for 'Todos', verifica se a categoria da tarefa corresponde ao filtro
     const categoriaOk = filtroCategoria === 'Todos' || tarefa.categoria === filtroCategoria;
+
     // caso não for todos, verifica se o status da tarefa corresponde à categroia
     const statusOk =
       filtroStatus === 'Todas' ||
@@ -108,13 +112,15 @@ export default function Listar() {
     return categoriaOk && statusOk; // se ambos forem True, a tarefa é adicionada a tarefasFiltradas
   });
 
+  
   return (
+
     // manipula o tema da página pelo css
     <div className={`container ${temaEscuro ? 'tema-escuro' : 'tema-claro'}`}>
       <div className="sidebar">
         <h3>Categorias</h3>
         <ul>
-          {/* cria um li com o nome de cada categoria, definindo se o filtro está ativo ou não pelo useState de categoria (ao clicar) */}
+          {/* cria um li com o nome de cada categoria, definindo se o filtro está ativo (padrao = todos) ou não pelo useState de categoria (ao clicar) */}
           {['Todos', 'Escola', 'Trabalho', 'Pessoal'].map((cat) => (
             <li
               key={cat}
